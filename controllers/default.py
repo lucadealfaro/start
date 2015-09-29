@@ -18,7 +18,7 @@ def index():
     """
     logger.info("Here we are, in the controller.")
     response.flash = T("Hello World")
-    return dict(message=T('Welcome to web2py!'))
+    return dict(shopname='Slugshop')
 
 
 def user():
