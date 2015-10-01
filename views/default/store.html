@@ -1,0 +1,13 @@
+{{extend 'layout.html'}}
+
+<h1>{{=shop['name']}}</h1>
+
+    <div class="mylist">
+      <span class="shoptitle">{{=icon_shop}}
+        {{=shop['name']}}</span>
+      <ul class="shoplist">
+        {{for ingr in shop['ingredients']:}}
+          <li>{{=ingr}}</li>
+        {{pass}}
+      </ul>
+    </div>

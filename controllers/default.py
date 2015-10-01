@@ -8,25 +8,36 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 #########################################################################
 
-def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
+SHOP_LIST = {
+    0: {'name': 'Safeway',
+        'ingredients': ['pasta', 'oil', 'salt', 'anchovies']},
+    1: {'name': "Trader Joe's",
+        'ingredients': ['tuna', 'peanuts', 'beer']},
+    2: {'name': 'The Milk Pail',
+        'ingredients': ['yoghurt', 'bread', 'onions', 'parmesan']}
+}
 
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
+
+def index():
     logger.info("Here we are, in the controller.")
     response.flash = T("Hello World")
-    shop_list = [
-        {'name': 'Safeway',
-         'ingredients': ['pasta', 'oil', 'salt', 'anchovies']},
-        {'name': "Trader Joe's",
-         'ingredients': ['tuna', 'peanuts', 'beer']},
-        {'name': 'The Milk Pail',
-         'ingredients': ['yoghurt', 'bread', 'onions', 'parmesan']}
-    ]
-    return dict(shop_list=shop_list)
+    return dict(shops=SHOP_LIST)
+
+
+def store():
+    store_id = request.args(0)
+    try:
+        sid = int(store_id)
+    except Exception, e:
+        session.message = T('Bad URL')
+        redirect(URL('default', 'index'))
+    s = SHOP_LIST.get(sid)
+    logger.info("Found the store: %r" % s)
+    if s is None:
+        session.message = T('No such store')
+        redirect(URL('default', 'index'))
+    session.pasta_sauce = "Pesto" # Not used.
+    return dict(shop=s)
 
 
 def user():

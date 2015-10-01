@@ -2,10 +2,11 @@
 
 <h1>My title</h1>
 
-{{if len(shop_list) > 0:}}
-  {{for shop in shop_list:}}
+{{if len(shops) > 0:}}
+  {{for shop_id, shop in shops.items():}}
     <div class="mylist">
-      <span class="shoptitle">{{=icon_shop}} {{=shop['name']}}</span>
+      <span class="shoptitle">{{=icon_shop}}
+        {{=A(shop['name'], _href=URL('default', 'store', args=[shop_id]) )}}</span>
       <ul class="shoplist">
         {{for ingr in shop['ingredients']:}}
           <li>{{=ingr}}</li>
