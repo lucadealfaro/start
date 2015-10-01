@@ -15,6 +15,7 @@ div.mylist {
   @include border-radius(20px);
   border: 1px solid $clrText;
   @include box-shadow(rgba(#000,0.7) 0 4px 10px 2px);
+  vertical-align: top;
   display: inline-block;
   .shoptitle {
     font-size: 1.6em;

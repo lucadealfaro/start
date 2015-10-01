@@ -18,7 +18,15 @@ def index():
     """
     logger.info("Here we are, in the controller.")
     response.flash = T("Hello World")
-    return dict(shopname='Slugshop')
+    shop_list = [
+        {'name': 'Safeway',
+         'ingredients': ['pasta', 'oil', 'salt', 'anchovies']},
+        {'name': "Trader Joe's",
+         'ingredients': ['tuna', 'peanuts', 'beer']},
+        {'name': 'The Milk Pail',
+         'ingredients': ['yoghurt', 'bread', 'onions', 'parmesan']}
+    ]
+    return dict(shop_list=shop_list)
 
 
 def user():

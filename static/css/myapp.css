@@ -26,9 +26,10 @@ div.mylist {
   -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 4px 10px 2px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 4px 10px 2px;
   box-shadow: rgba(0, 0, 0, 0.7) 0 4px 10px 2px;
+  vertical-align: top;
   display: inline-block;
 }
-/* line 19, ../sass/_main.scss */
+/* line 20, ../sass/_main.scss */
 div.mylist .shoptitle {
   font-size: 1.6em;
   color: #3748bb;
