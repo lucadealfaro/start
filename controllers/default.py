@@ -59,7 +59,7 @@ def read_email():
     email_id = request.args(0)
     if email_id is None or email_id not in email_dict:
         session.message = T('No such message')
-        redirect('default', 'index')
+        redirect(URL('default', 'index'))
     email = email_dict[email_id]
     # Ok, great, now we have the email to display.
     return dict(email=email)
