@@ -14,10 +14,18 @@ from gluon.contrib.appconfig import AppConfig
 ## once in production, remove reload=True to gain full speed
 myconf = AppConfig(reload=True)
 
+# Somehow figure out if this is a production setting.
+# Look at the environment via os, or at the request, e.g.
+# if coming from localhost.
+in_production = False
 
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
-    db = DAL(myconf.take('db.uri'), pool_size=myconf.take('db.pool_size', cast=int), check_reserved=['all'])
+    db = DAL(myconf.take('db.uri'),
+             pool_size=myconf.take('db.pool_size', cast=int),
+             check_reserved=['all'],
+             migrate_enabled= not in_production,
+             )
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')
     db = DAL('google:datastore+ndb')
