@@ -32,10 +32,19 @@ db.store.star_rating.default = 3
 db.define_table('ingredient',
                 Field('name'),
                 Field('description', 'text'),
-                Field('favorite_store', 'reference store'), # This is called a foreign key
                 )
 
-db.ingredient.favorite_store.ondelete = "SET NULL"
+db.define_table('canbuy',
+                Field('user_id', db.auth_user),
+                Field('store', 'reference store'),
+                Field('ingredient', 'reference ingredient'),
+                Field('is_favorite', 'boolean'),
+                )
+db.canbuy.user_id.default = auth.user_id
+db.canbuy.is_favorite.default = False
+
+
+
 
 
 # 'integer', 'float', 'text', ...
