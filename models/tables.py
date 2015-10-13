@@ -21,12 +21,15 @@ db.define_table('store',
                 Field('name'),
                 Field('phone'),
                 Field('created_on', 'datetime'),
+                Field('street_no', 'integer'),
                 Field('star_rating', 'float'),
                 Field('description', 'text'),
                 )
 
 db.store.created_on.default = datetime.utcnow()
 db.store.star_rating.default = 3
+db.store.street_no.label = 'Street number'
+db.store.id.readable = False
 
 # All these tables have an "id" already defined.
 db.define_table('ingredient',
@@ -43,8 +46,13 @@ db.define_table('canbuy',
 db.canbuy.user_id.default = auth.user_id
 db.canbuy.is_favorite.default = False
 
-
-
+db.define_table('recipe',
+        Field('name', required=True),
+        Field('time_required', 'float'),
+        Field('description', 'text'),
+        Field('recipe_cost', 'float', requires=IS_FLOAT_IN_RANGE(0, 100))
+      )
+db.recipe.recipe_cost.label = 'Cost'
 
 
 # 'integer', 'float', 'text', ...

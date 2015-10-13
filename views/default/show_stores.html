@@ -1,0 +1,7 @@
+{{extend 'layout.html'}}
+
+<ul>
+  {{for store in store_list:}}
+  <li>{{=A(store.name, _href=URL('default', 'store_details', args=[store.id]))}}</li>
+  {{pass}}
+</ul>
