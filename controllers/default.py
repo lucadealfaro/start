@@ -52,13 +52,15 @@ def chat():
     # This query selects all messages between the two people.
     q = ((db.messages.user0 == two_people[0]) & (db.messages.user1 == two_people[1]))
     # This is the list of messages.
+    db.messages.sender.represent = lambda v, r: 'You' if v == session.person_id else other.name
     grid = SQLFORM.grid(q,
-                        fields=[db.messages.msg_time, db.messages.msg_text],
+                        fields=[db.messages.msg_time, db.messages.sender, db.messages.msg_text],
                         details=False,
                         create=False,
                         orderby=~db.messages.msg_time,
                         csv=False,
                         editable=False,
+                        deletable=False,
                         searchable=False,
                         user_signature=False)
     # This is a form for adding one more message.

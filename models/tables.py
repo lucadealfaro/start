@@ -29,6 +29,7 @@ db.people.id.readable = False
 db.define_table('messages',
     Field('user0', db.people),
     Field('user1', db.people),
+    Field('sender',  db.people, default=session.person_id),
     Field('msg_time', 'datetime', default=datetime.utcnow()),
     Field('msg_text', 'text'))
 
