@@ -27,7 +27,7 @@ def people():
     # Creates a list of other people.
     q = db.people
     links = [dict(header='',
-                 body = lambda r: A('Chat', _class='btn btn-success',
+                 body = lambda r: A(I(_class='fa fa-comments'), 'Chat', _class='btn btn-success',
                                     _href=URL('default', 'chat', args=[session.person_id, r.id])))]
     grid = SQLFORM.grid(q,
                         links=links,

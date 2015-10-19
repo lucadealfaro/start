@@ -2,3 +2,8 @@
 .colorful {
   color: #bb8833;
 }
+
+/* line 6, ../sass/_main.scss */
+.btn .fa {
+  padding-right: 0.5em;
+}
