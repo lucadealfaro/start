@@ -2,11 +2,21 @@
 
 <h1>{{=title}}</h1>
 
-<div id="write_msg">
+<div id="write_msg" style="display: none">
   {{=form}}
 </div>
 
-<div id="write_button">
-  <a class="btn btn-success"><i class="fa fa-plus"></i> Write</a>
+<div id="write_button_area">
+  <a class="btn btn-success" id="button_write"><i class="fa fa-plus"></i> Write</a>
 </div>
 {{=grid}}
+
+
+<script>
+$(function() {
+  $("#button_write").click(function(e) {
+    $("#write_msg").slideDown();
+    $("#write_button_area").hide();
+  })
+})
+</script>
