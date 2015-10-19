@@ -3,13 +3,16 @@
 
 def index():
     """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
+    Allows a person to register in the system, if they are not registered already.
     """
-    return dict(message=T('Welcome to web2py!'))
+    # If the person is registered, we store the person id in session.person_id.
+    row = db.people(session.person_id)
+    form = SQLFORM(db.people, record=row)
+    if form.process().accepted:
+        session.person_id = form.vars.id
+        session.flash = "Welcome, %r!"
+        redirect(URL('default', 'people'))
+    return dict(form=form)
 
 
 def user():
