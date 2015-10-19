@@ -20,4 +20,4 @@ db.define_table('people',
     Field('name', required=True),
     )
 
-db.people.name.label = "What's your name?"
+db.people.id.readable = False

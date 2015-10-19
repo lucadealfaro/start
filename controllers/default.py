@@ -6,13 +6,34 @@ def index():
     Allows a person to register in the system, if they are not registered already.
     """
     # If the person is registered, we store the person id in session.person_id.
+    db.people.name.label = "What's your name?"
     row = db.people(session.person_id)
     form = SQLFORM(db.people, record=row)
     if form.process().accepted:
         session.person_id = form.vars.id
-        session.flash = "Welcome, %r!"
+        session.flash = "Welcome, %s!" % form.vars.name
         redirect(URL('default', 'people'))
     return dict(form=form)
+
+
+def people():
+    """
+    Gives the person a table displaying all the people, to search.
+    """
+    db.people.name.label = "Name"
+    if session.person_id is None:
+        # First, we need to know who you are.
+        return redirect(URL('default', 'index'))
+    # Creates a list of other people.
+    q = db.people
+    grid = SQLFORM.grid(q,
+                        editable=False,
+                        details=False,
+                        csv=False)
+    return dict(grid=grid)
+
+
+
 
 
 def user():
