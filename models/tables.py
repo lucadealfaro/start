@@ -15,9 +15,22 @@
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
+from datetime import datetime
+
 # This is a table for all users.
 db.define_table('people',
     Field('name', required=True),
     )
 
 db.people.id.readable = False
+
+
+# Here is a table for messages.
+db.define_table('messages',
+    Field('user0', db.people),
+    Field('user1', db.people),
+    Field('msg_time', 'datetime', default=datetime.utcnow()),
+    Field('msg_text', 'text'))
+
+db.messages.msg_time.label = "Time"
+db.messages.msg_text.label = "Message"

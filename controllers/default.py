@@ -24,11 +24,11 @@ def people():
     if session.person_id is None:
         # First, we need to know who you are.
         return redirect(URL('default', 'index'))
-    # Creates a list of other people.
-    q = db.people
+    # Creates a list of other people, other than myself.
+    q = (db.people.id != session.person_id)
     links = [dict(header='',
                  body = lambda r: A(I(_class='fa fa-comments'), 'Chat', _class='btn btn-success',
-                                    _href=URL('default', 'chat', args=[session.person_id, r.id])))]
+                                    _href=URL('default', 'chat', args=[r.id])))]
     grid = SQLFORM.grid(q,
                         links=links,
                         editable=False,
@@ -37,6 +37,28 @@ def people():
     return dict(grid=grid)
 
 
+def chat():
+    """This page enables you to chat with another person."""
+    # Let us read the record telling us who is the other person.
+    other = db.people(request.args(0))
+    if session.person_id is None or other is None:
+        # Back to square 0.
+        return redirect(URL('default', 'index'))
+    # Pair of people involved.
+    two_people = [session.person_id, other.id]
+    # We want them in order, so that all messages will be stored under the same pairs of ids.
+    two_people.sort()
+    # This query selects all messages between the two people.
+    q = ((db.messages.user0 == two_people[0]) & (db.messages.user1 == two_people[1]))
+    grid = SQLFORM.grid(q,
+                        fields=[db.messages.msg_time, db.messages.msg_text],
+                        details=False,
+                        create=True,
+                        orderby=~db.messages.msg_time,
+                        csv=False,
+                        editable=False,
+                        user_signature=False)
+    return dict(grid=grid)
 
 
 
