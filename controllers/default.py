@@ -41,6 +41,7 @@ def chat():
     """This page enables you to chat with another person."""
     # Let us read the record telling us who is the other person.
     other = db.people(request.args(0))
+    logger.info("I am %r, chatting with %r" % (session.person_id, other))
     if session.person_id is None or other is None:
         # Back to square 0.
         return redirect(URL('default', 'index'))
@@ -53,7 +54,7 @@ def chat():
     grid = SQLFORM.grid(q,
                         fields=[db.messages.msg_time, db.messages.msg_text],
                         details=False,
-                        create=True,
+                        create=False,
                         orderby=~db.messages.msg_time,
                         csv=False,
                         editable=False,
