@@ -20,9 +20,11 @@ from datetime import datetime
 # This is a table for all users.
 db.define_table('people',
     Field('name', required=True),
+    Field('description', 'text'),
     )
 
 db.people.id.readable = False
+db.people.description.represent = lambda v, r: DIV(v, _class="msg_content")
 
 
 # Here is a table for messages.
@@ -35,3 +37,4 @@ db.define_table('messages',
 
 db.messages.msg_time.label = "Time"
 db.messages.msg_text.label = "Message"
+db.messages.msg_text.represent = lambda v, r: DIV(v, _class="msg_content")

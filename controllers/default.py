@@ -59,13 +59,14 @@ def chat():
                         create=False,
                         orderby=~db.messages.msg_time,
                         csv=False,
+                        sortable=False,
                         editable=False,
                         deletable=False,
                         searchable=False,
                         user_signature=False)
     # This is a form for adding one more message.
-    form = SQLFORM.factory(Field('message'))
-    form.add_button('Cancel', URL('default', 'chat', args=[other.id]))
+    form = SQLFORM.factory(Field('message', 'text'))
+    form.add_button('Cancel', '#')
     # If the form has been submitted, inserts the message.
     if form.process().accepted:
         db.messages.insert(user0 = two_people[0],

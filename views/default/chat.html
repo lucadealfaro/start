@@ -17,6 +17,10 @@ $(function() {
   $("#button_write").click(function(e) {
     $("#write_msg").slideDown();
     $("#write_button_area").hide();
+  });
+  $("form button").click(function(e) {
+    $("#write_msg").slideUp();
+    $("#write_button_area").show();
   })
 })
 </script>
