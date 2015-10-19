@@ -51,6 +51,7 @@ def chat():
     two_people.sort()
     # This query selects all messages between the two people.
     q = ((db.messages.user0 == two_people[0]) & (db.messages.user1 == two_people[1]))
+    # This is the list of messages.
     grid = SQLFORM.grid(q,
                         fields=[db.messages.msg_time, db.messages.msg_text],
                         details=False,
@@ -60,9 +61,18 @@ def chat():
                         editable=False,
                         searchable=False,
                         user_signature=False)
+    # This is a form for adding one more message.
+    form = SQLFORM.factory(Field('message'))
+    form.add_button('Cancel', URL('default', 'chat', args=[other.id]))
+    # If the form has been submitted, inserts the message.
+    if form.process().accepted:
+        db.messages.insert(user0 = two_people[0],
+                           user1 = two_people[1],
+                           msg_text = form.vars.message)
+        session.flash = "Message sent!"
+        redirect(URL('default', 'chat', args=[other.id]))
     title = "Chat with %s" % other.name
-    return dict(title=title, grid=grid)
-
+    return dict(title=title, grid=grid, form=form)
 
 
 def user():
