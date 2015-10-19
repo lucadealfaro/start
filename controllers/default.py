@@ -58,8 +58,10 @@ def chat():
                         orderby=~db.messages.msg_time,
                         csv=False,
                         editable=False,
+                        searchable=False,
                         user_signature=False)
-    return dict(grid=grid)
+    title = "Chat with %s" % other.name
+    return dict(title=title, grid=grid)
 
 
 
