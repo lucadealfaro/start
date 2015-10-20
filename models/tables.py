@@ -19,19 +19,21 @@ from datetime import datetime
 
 # This is a table for all users.
 db.define_table('people',
+    Field('user_id', db.auth_user, default=auth.user_id),
     Field('name', required=True),
     Field('description', 'text'),
     )
 
 db.people.id.readable = False
+db.people.user_id.readable = False
 db.people.description.represent = lambda v, r: DIV(v, _class="msg_content")
 
 
 # Here is a table for messages.
 db.define_table('messages',
-    Field('user0', db.people),
-    Field('user1', db.people),
-    Field('sender',  db.people, default=session.person_id),
+    Field('user0', db.auth_user),
+    Field('user1', db.auth_user),
+    Field('sender',  db.auth_user, default=auth.user_id),
     Field('msg_time', 'datetime', default=datetime.utcnow()),
     Field('msg_text', 'text'))
 

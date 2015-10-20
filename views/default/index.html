@@ -1,5 +1,18 @@
 {{extend 'layout.html'}}
 
+{{if auth.user_id is None:}}
+
+<h1>Find other people</h1>
+
+<div id="main_login">
+{{=A('Sign Up', _class='btn btn-warning', _href=URL('default', 'user', args=['register']))}}
+{{=A('Sign In', _class='btn btn-success', _href=URL('default', 'user', args=['login']))}}
+</div>
+
+{{else:}}
+
 <h1>Tells us about you</h1>
 
 {{=form}}
+
+{{pass}}

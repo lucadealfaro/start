@@ -7,28 +7,26 @@ def index():
     """
     # If the person is registered, we store the person id in session.person_id.
     db.people.name.label = "What's your name?"
-    row = db.people(session.person_id)
+    logger.info("Session: %r" % session)
+    row = db(db.people.user_id == auth.user_id).select().first()
+    db.people.user_id.readable = db.people.user_id.writable = False
     form = SQLFORM(db.people, record=row)
     if form.process().accepted:
-        session.person_id = form.vars.id
         session.flash = "Welcome, %s!" % form.vars.name
         redirect(URL('default', 'people'))
     return dict(form=form)
 
-
+@auth.requires_login()
 def people():
     """
     Gives the person a table displaying all the people, to search.
     """
     db.people.name.label = "Name"
-    if session.person_id is None:
-        # First, we need to know who you are.
-        return redirect(URL('default', 'index'))
     # Creates a list of other people, other than myself.
-    q = (db.people.id != session.person_id)
-    links = [dict(header='',
+    q = (db.people.id != auth.user_id)
+    links = [dict(header='Click to chat',
                  body = lambda r: A(I(_class='fa fa-comments'), 'Chat', _class='btn btn-success',
-                                    _href=URL('default', 'chat', args=[r.id])))]
+                                    _href=URL('default', 'chat', args=[r.user_id])))]
     grid = SQLFORM.grid(q,
                         links=links,
                         editable=False,
@@ -36,23 +34,23 @@ def people():
                         csv=False)
     return dict(grid=grid)
 
-
+@auth.requires_login()
 def chat():
     """This page enables you to chat with another person."""
     # Let us read the record telling us who is the other person.
-    other = db.people(request.args(0))
-    logger.info("I am %r, chatting with %r" % (session.person_id, other))
-    if session.person_id is None or other is None:
+    other = db(db.people.user_id == request.args(0)).select().first()
+    logger.info("I am %r, chatting with %r" % (auth.user_id, other))
+    if other is None:
         # Back to square 0.
         return redirect(URL('default', 'index'))
     # Pair of people involved.
-    two_people = [session.person_id, other.id]
+    two_people = [auth.user_id, other.id]
     # We want them in order, so that all messages will be stored under the same pairs of ids.
     two_people.sort()
     # This query selects all messages between the two people.
     q = ((db.messages.user0 == two_people[0]) & (db.messages.user1 == two_people[1]))
     # This is the list of messages.
-    db.messages.sender.represent = lambda v, r: 'You' if v == session.person_id else other.name
+    db.messages.sender.represent = lambda v, r: 'You' if v == auth.user_id else other.name
     grid = SQLFORM.grid(q,
                         fields=[db.messages.msg_time, db.messages.sender, db.messages.msg_text],
                         details=False,
@@ -73,7 +71,7 @@ def chat():
                            user1 = two_people[1],
                            msg_text = form.vars.message)
         session.flash = "Message sent!"
-        redirect(URL('default', 'chat', args=[other.id]))
+        redirect(URL('default', 'chat', args=[other.user_id]))
     title = "Chat with %s" % other.name
     return dict(title=title, grid=grid, form=form)
 
