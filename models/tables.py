@@ -35,8 +35,19 @@ db.define_table('messages',
     Field('user1', db.auth_user),
     Field('sender',  db.auth_user, default=auth.user_id),
     Field('msg_time', 'datetime', default=datetime.utcnow()),
-    Field('msg_text', 'text'))
+    Field('msg_id', 'text')) # Stored as a string
 
+db.messages.user0.readable = db.messages.user0.writable = False
+db.messages.user1.readable = db.messages.user1.writable = False
 db.messages.msg_time.label = "Time"
-db.messages.msg_text.label = "Message"
-db.messages.msg_text.represent = lambda v, r: DIV(v, _class="msg_content")
+db.messages.msg_id.label = "Message"
+db.messages.msg_id.represent = lambda v, r: get_text(v)
+
+def get_text(v):
+    r = db2.textblob(v)
+    return '' if r is None else r.mytext
+
+# Table for big chunks of text.
+db2.define_table('textblob',
+    Field('mytext', 'text'),
+    )

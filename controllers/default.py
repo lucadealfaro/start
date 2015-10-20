@@ -34,6 +34,11 @@ def people():
                         csv=False)
     return dict(grid=grid)
 
+
+def store_message(form):
+    form.vars.msg_id = str(db2.textblob.insert(mytext = form.vars.msg_id))
+
+
 @auth.requires_login()
 def chat():
     """This page enables you to chat with another person."""
@@ -52,7 +57,7 @@ def chat():
     # This is the list of messages.
     db.messages.sender.represent = lambda v, r: 'You' if v == auth.user_id else other.name
     grid = SQLFORM.grid(q,
-                        fields=[db.messages.msg_time, db.messages.sender, db.messages.msg_text],
+                        fields=[db.messages.msg_time, db.messages.sender, db.messages.msg_id],
                         details=False,
                         create=False,
                         orderby=~db.messages.msg_time,
@@ -62,16 +67,18 @@ def chat():
                         deletable=False,
                         searchable=False,
                         user_signature=False)
+
     # This is a form for adding one more message.
-    form = SQLFORM.factory(Field('message', 'text'))
-    form.add_button('Cancel', '#')
-    # If the form has been submitted, inserts the message.
-    if form.process().accepted:
-        db.messages.insert(user0 = two_people[0],
-                           user1 = two_people[1],
-                           msg_text = form.vars.message)
+
+    db.messages.sender.readable = db.messages.sender.writable = False
+    db.messages.msg_time.readable = db.messages.msg_time.writable = False
+    form = SQLFORM(db.messages)
+    form.vars.user0 = two_people[0]
+    form.vars.user1 = two_people[1]
+    if form.process(onvalidation=store_message).accepted:
         session.flash = "Message sent!"
         redirect(URL('default', 'chat', args=[other.user_id]))
+
     title = "Chat with %s" % other.name
     return dict(title=title, grid=grid, form=form)
 
