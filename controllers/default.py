@@ -9,16 +9,11 @@
 #########################################################################
 
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
-    logger.info("Here we are, in the controller.")
-    response.flash = T("Hello World")
-    return dict(shopname='Slugshop')
+    store_list = db().select(db.stores.ALL)
+    form = SQLFORM(db.stores)
+    if form.process().accepted:
+        redirect(URL('default', 'index'))
+    return dict(store_list=store_list, form=form)
 
 
 def user():

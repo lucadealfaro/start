@@ -1,19 +1,19 @@
 {{extend 'layout.html'}}
 
-<h1>My title</h1>
-<h2>subtitle</h2>
 
-<div class="maincontent">
-
-<span class="mytext">Hello</span>
-
+<div id="entryform">
+  {{=form}}
 </div>
 
-<div class="mylist">
-  <span class="shoptitle">{{=shopname}}</span>
-  <ul class="shoplist">
-    <li>Pasta</li>
-    <li>Rice</li>
-    <li>Tomatoes</li>
-  </ul>
+<div id="stores">
+  {{for s in store_list:}}
+  <div class="mylist">
+    <span class="shoptitle">{{=s.store_name}}</span>
+    <ul class="shoplist">
+      <li>Pasta</li>
+      <li>Rice</li>
+      <li>Tomatoes</li>
+    </ul>
+  </div>
+  {{pass}}
 </div>
