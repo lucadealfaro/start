@@ -1,9 +1,11 @@
 {{extend 'layout.html'}}
 
 
-<div id="entryform">
+<div id="entryform" style="display: none">
   {{=form}}
 </div>
+
+<a class="btn btn-success" id="btn_add">Add Store</a>
 
 <div id="stores">
   {{for s in store_list:}}
@@ -17,3 +19,14 @@
   </div>
   {{pass}}
 </div>
+
+<script>
+  $("#btn_add").click(function(e) {
+    // Yeehaa
+    var x = 1;
+    $("#entryform").slideDown(1000);
+    x = x + 1;
+    $("#btn_add").slideUp(1000);
+    var y = x + 2;
+  });
+</script>
