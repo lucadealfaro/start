@@ -1,32 +1,15 @@
 {{extend 'layout.html'}}
 
 
-<div id="entryform" style="display: none">
-  {{=form}}
+{{for img_info in image_list:}}
+<div style="display:inline-block; margin:10px;">
+   <img src="{{=img_info['url']}}" style="height:200px" />
+   <div>
+     {{if auth.user:}}
+     <input class="form-control rating" value="{{=img_info['num_stars']}}" data-cat="{{=img_info['id']}}"/>
+     {{pass}}
+   </div>
 </div>
+{{pass}}
 
-<a class="btn btn-success" id="btn_add">Add Store</a>
 
-<div id="stores">
-  {{for s in store_list:}}
-  <div class="mylist">
-    <span class="shoptitle">{{=s.store_name}}</span>
-    <ul class="shoplist">
-      <li>Pasta</li>
-      <li>Rice</li>
-      <li>Tomatoes</li>
-    </ul>
-  </div>
-  {{pass}}
-</div>
-
-<script>
-  $("#btn_add").click(function(e) {
-    // Yeehaa
-    var x = 1;
-    $("#entryform").slideDown(1000);
-    x = x + 1;
-    $("#btn_add").slideUp(1000);
-    var y = x + 2;
-  });
-</script>

@@ -8,12 +8,29 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 #########################################################################
 
+IMAGE_URLS = [
+    'https://storage.googleapis.com/lucadealfaro-share/img1.jpg',
+    'https://storage.googleapis.com/lucadealfaro-share/img2.jpg',
+    'https://storage.googleapis.com/lucadealfaro-share/img3.jpg',
+    'https://storage.googleapis.com/lucadealfaro-share/img4.jpg',
+]
+
 def index():
-    store_list = db().select(db.stores.ALL)
-    form = SQLFORM(db.stores)
-    if form.process().accepted:
-        redirect(URL('default', 'index'))
-    return dict(store_list=store_list, form=form)
+
+    def get_num_stars(img_idx):
+        if not auth.user_id:
+            return None
+        r = db((db.rating.user_id == auth.user_id) & (db.rating.image_id == img_idx)).select().first()
+        return None if r is None else r.num_stars
+
+    image_list = []
+    for i, img_url in enumerate(IMAGE_URLS):
+        image_list.append(dict(
+            url=img_url,
+            num_stars = get_num_stars(i),
+            id=i,
+        ))
+    return dict(image_list=image_list)
 
 
 def user():

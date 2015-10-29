@@ -15,6 +15,8 @@
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
-db.define_table('stores',
-                Field('store_name'),
+db.define_table('rating',
+                Field('user_id', db.auth_user, default=auth.user_id),
+                Field('image_id', 'integer'),
+                Field('num_stars', 'integer'),
                 )
