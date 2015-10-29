@@ -32,6 +32,18 @@ def index():
         ))
     return dict(image_list=image_list)
 
+@auth.requires_signature()
+def vote():
+    picid = int(request.vars.picid)
+    num_stars = int(request.vars.rating)
+    db.rating.update_or_insert(
+        ((db.rating.image_id == picid) & (db.rating.user_id == auth.user_id)),
+        image_id = picid,
+        user_id = auth.user_id,
+        num_stars = num_stars
+    )
+    return "ok"
+
 
 def user():
     """
