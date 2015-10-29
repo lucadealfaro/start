@@ -17,17 +17,17 @@ IMAGE_URLS = [
 
 def index():
 
-    def get_num_stars(img_idx):
+    def get_thumbs(img_idx):
         if not auth.user_id:
             return None
         r = db((db.rating.user_id == auth.user_id) & (db.rating.image_id == img_idx)).select().first()
-        return None if r is None else r.num_stars
+        return None if r is None else r.thumbs
 
     image_list = []
     for i, img_url in enumerate(IMAGE_URLS):
         image_list.append(dict(
             url=img_url,
-            num_stars = get_num_stars(i),
+            thumbs = get_thumbs(i),
             id=i,
         ))
     return dict(image_list=image_list)
@@ -35,12 +35,12 @@ def index():
 @auth.requires_signature()
 def vote():
     picid = int(request.vars.picid)
-    num_stars = int(request.vars.rating)
+    thumbs = request.vars.thumbs
     db.rating.update_or_insert(
         ((db.rating.image_id == picid) & (db.rating.user_id == auth.user_id)),
         image_id = picid,
         user_id = auth.user_id,
-        num_stars = num_stars
+        thumbs = thumbs
     )
     return "ok"
 
