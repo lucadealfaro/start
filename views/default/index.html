@@ -1,19 +1,18 @@
 {{extend 'layout.html'}}
 
-
 {{for img_info in image_list:}}
 <div style="display:inline-block; margin:10px;">
    <img src="{{=img_info['url']}}" style="height:200px" />
    <div>
      {{if auth.user:}}
-       <span class="thumb-ratings" data-picid="{{=img_info['id']}}">
+       <span class="thumb-rating" data-picid="{{=img_info['id']}}">
          <input class="form-control rating" value="{{=img_info['thumbs']}}" style="display:none"/>
          <span style="white-space:nowrap">
            <span class="thumbs-up">
-             <i class="fa"></i>
+             <i class="fa fa-thumbs-o-up"></i>
            </span>
            <span class="thumbs-down">
-             <i class="fa"></i>
+             <i class="fa fa-thumbs-o-down"></i>
            </span>
          </span>
        </span>
@@ -35,15 +34,28 @@ jQuery('span.thumb-rating').each(function(){
   // And the thumbs up and down.
   var thumbs_up = self.find("span.thumbs-up i.fa");
   var thumbs_down = self.find("span.thumbs-down i.fa");
+  var span_up = self.find("span.thumbs-up");
+  var span_down = self.find("span.thumbs-down");
   // And the picture id.
   var picid = self.attr('data-picid');
 
-  // Write here a function that displays the correct state of the thumbs up and down
-  // according to the value of the input.
   // To cause a thumbs_up to appear filled, you add to it the class fa-thumbs-up;
   // to cause it to appear unfilled, you add to the i.fa element the class fa-thumbs-o-up.
   // For instance: thumbs_up.removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up")
   // would fill it.
+
+  var do_thumbs_up = function() {
+    // Write here a function that fills the thumbs up, and unfills the thumbs down.
+  };
+  var do_thumbs_down = function() {
+    // Write here a function that fills the thumbs down, and unfills the thumbs up.
+  };
+  var do_no_thumbs = function() {
+    // Write here a function that unfills both thumbs.
+  };
+
+  // Using the above functions, write a function that displays the correct state of the
+  // thumbs up and down according to the value of the input.
   var show_thumbs = function() {
     // Write code here.
   };
